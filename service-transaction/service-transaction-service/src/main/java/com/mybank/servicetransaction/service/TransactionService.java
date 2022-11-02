@@ -105,4 +105,8 @@ public class TransactionService {
       .timestamp(System.currentTimeMillis())
       .build());
   }
+
+  public Mono<Transaction> update(Transaction transaction) {
+    return this.transactionRepository.update(transaction);
+  }
 }
