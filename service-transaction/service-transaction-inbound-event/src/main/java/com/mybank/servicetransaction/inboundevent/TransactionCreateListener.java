@@ -8,7 +8,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mybank.servicetransaction.eventmodel.BaseEvent;
 import com.mybank.servicetransaction.eventmodel.TransactionEvent;
-import com.mybank.servicetransaction.model.Transaction;
+import com.mybank.servicetransaction.helper.TransactionHelper;
+import com.mybank.servicetransaction.outboundevent.PublisherService;
+import com.mybank.servicetransaction.properties.EventProperties;
 import com.mybank.servicetransaction.service.TransactionService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,10 @@ public class TransactionCreateListener {
 
   private final TransactionService transactionService;
 
+  private final PublisherService publisherService;
+
+  private final EventProperties eventProperties;
+
   private final ObjectMapper objectMapper;
 
   @KafkaListener(topics = "${event.topic.inbound.success-transaction}")
@@ -31,7 +37,7 @@ public class TransactionCreateListener {
       .mapNotNull(this::toEvent)
       .doOnNext(event -> log.info("Consume success event from topic {}, with event {}", consumerRecord.topic(), event))
       .map(BaseEvent::getPayload)
-      .map(this::toPartialTransaction)
+      .map(TransactionHelper::toTransaction)
       .flatMap(transactionService::update)
       .subscribe();
   }
@@ -43,33 +49,13 @@ public class TransactionCreateListener {
       .mapNotNull(this::toEvent)
       .doOnNext(event -> log.info("Consume failed event from topic {}, with event {}", consumerRecord.topic(), event))
       .map(BaseEvent::getPayload)
-      .map(this::toPartialTransaction)
-      .flatMap(transactionService::update)
+      .map(TransactionHelper::toTransaction)
+      .flatMap(transaction ->
+        Mono.zip(
+          transactionService.update(transaction),
+            publisherService.publish(TransactionHelper.toTransactionEvent(transaction), eventProperties.getDeadLetters()))
+          .map(tuple -> tuple))
       .subscribe();
-  }
-
-  private Transaction toPartialTransaction(TransactionEvent event) {
-    return Transaction.builder()
-      .transactionId(event.getTransactionId())
-      .amount(event.getAmount())
-      .currency(event.getCurrency())
-      .note(event.getNote())
-      .status(event.getStatus())
-      .statusDetail(event.getStatusDetail())
-      .source(Transaction.DestinationDetail.builder()
-        .accountNumber(event.getSource().getAccountNumber())
-        .accountHolderName(event.getSource().getAccountHolderName())
-        .accountProvider(event.getSource().getAccountProvider())
-        .transactionType(event.getSource().getTransactionType())
-        .build())
-      .destination(Transaction.DestinationDetail.builder()
-        .accountNumber(event.getDestination().getAccountNumber())
-        .accountHolderName(event.getDestination().getAccountHolderName())
-        .accountProvider(event.getDestination().getAccountProvider())
-        .transactionType(event.getDestination().getTransactionType())
-        .build())
-      .timestamp(event.getTimestamp())
-      .build();
   }
 
   private BaseEvent<TransactionEvent> toEvent(String message) {

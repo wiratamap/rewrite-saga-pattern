@@ -9,15 +9,15 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>service-transaction-inbound-event</artifactId>
+  <artifactId>service-transaction-helper</artifactId>
   <dependencies>
     <dependency>
       <groupId>com.mybank</groupId>
-      <artifactId>service-transaction-service</artifactId>
+      <artifactId>service-transaction-event-model</artifactId>
     </dependency>
     <dependency>
       <groupId>com.mybank</groupId>
-      <artifactId>service-transaction-helper</artifactId>
+      <artifactId>service-transaction-model</artifactId>
     </dependency>
   </dependencies>
 

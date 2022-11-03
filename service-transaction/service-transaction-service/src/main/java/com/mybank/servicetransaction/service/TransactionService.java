@@ -2,6 +2,7 @@ package com.mybank.servicetransaction.service;
 
 import java.util.UUID;
 
+import com.mybank.servicetransaction.helper.TransactionHelper;
 import org.springframework.stereotype.Service;
 
 import com.mybank.servicetransaction.dto.request.TransactionRequest;
@@ -34,7 +35,7 @@ public class TransactionService {
       .flatMap(this::toSourceAccountTransaction)
       .flatMap(transaction -> Mono.zip(
         this.transactionRepository.save(transaction),
-        this.publisherService.publish(toTransactionEvent(transaction), eventProperties.getOutbound().getTransactions())
+        this.publisherService.publish(TransactionHelper.toTransactionEvent(transaction), eventProperties.getOutbound().getTransactions())
       ).map(tuple -> transaction))
       .map(this::toTransactionResponse);
   }
@@ -61,29 +62,6 @@ public class TransactionService {
       .build();
   }
 
-  private TransactionEvent toTransactionEvent(Transaction transaction) {
-    return TransactionEvent.builder()
-      .transactionId(transaction.getTransactionId())
-      .amount(transaction.getAmount())
-      .currency(transaction.getCurrency())
-      .note(transaction.getNote())
-      .status(transaction.getStatus())
-      .source(TransactionEvent.DestinationDetail.builder()
-        .accountNumber(transaction.getSource().getAccountNumber())
-        .accountHolderName(transaction.getSource().getAccountHolderName())
-        .accountProvider(transaction.getSource().getAccountProvider())
-        .transactionType(transaction.getSource().getTransactionType())
-        .build())
-      .destination(TransactionEvent.DestinationDetail.builder()
-        .accountNumber(transaction.getDestination().getAccountNumber())
-        .accountHolderName(transaction.getDestination().getAccountHolderName())
-        .accountProvider(transaction.getDestination().getAccountProvider())
-        .transactionType(transaction.getDestination().getTransactionType())
-        .build())
-      .timestamp(transaction.getTimestamp())
-      .build();
-  }
-
   private Mono<Transaction> toSourceAccountTransaction(TransactionRequest request) {
     return Mono.just(Transaction.builder()
       .transactionId(UUID.randomUUID())
@@ -91,12 +69,12 @@ public class TransactionService {
       .currency(request.getCurrency())
       .note(request.getNote())
       .status(TransactionStatus.PENDING)
-      .source(Transaction.DestinationDetail.builder()
+      .source(Transaction.AccountDetail.builder()
         .accountNumber(request.getSourceAccountNumber())
         .accountProvider(MY_BANK)
         .transactionType(TransactionType.DEBIT)
         .build())
-      .destination(Transaction.DestinationDetail.builder()
+      .destination(Transaction.AccountDetail.builder()
         .accountNumber(request.getDestinationAccountRequest().getAccountNumber())
         .accountHolderName(request.getDestinationAccountRequest().getAccountHolderName())
         .accountProvider(request.getDestinationAccountRequest().getAccountProvider())

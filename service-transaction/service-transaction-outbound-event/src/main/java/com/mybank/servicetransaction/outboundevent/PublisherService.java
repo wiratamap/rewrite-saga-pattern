@@ -26,6 +26,7 @@ public class PublisherService {
 
   public <T extends EventTransferAble> Mono<Boolean> publish(T event, List<String> topics) {
     return Flux.fromIterable(topics)
+      .doOnNext(topic -> log.info("Publish to topic {} with event payload {}", topic, event))
       .flatMap(topic -> Mono.fromFuture(kafkaTemplate.send(topic, toJson(event)).completable())
           .map(result -> Boolean.TRUE))
       .collectList()

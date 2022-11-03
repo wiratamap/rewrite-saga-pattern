@@ -52,6 +52,10 @@
       <groupId>com.mybank</groupId>
       <artifactId>service-transaction-properties</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.mybank</groupId>
+      <artifactId>service-transaction-helper</artifactId>
+    </dependency>
   </dependencies>
 
   <properties>

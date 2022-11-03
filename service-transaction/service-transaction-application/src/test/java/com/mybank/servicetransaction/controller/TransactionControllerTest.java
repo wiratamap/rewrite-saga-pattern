@@ -23,6 +23,7 @@ import com.mybank.servicetransaction.model.Transaction;
 import com.mybank.servicetransaction.testconfiguration.ElasticsearchConfiguration;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.Conflicts;
 import co.elastic.clients.elasticsearch.core.GetResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -42,7 +43,8 @@ class TransactionControllerTest {
       .index("transactions")
       .query(criteriaQuery -> criteriaQuery
         .matchAll(value -> value
-          .queryName(""))));
+          .queryName("")))
+      .conflicts(Conflicts.Proceed));
   }
 
   @Test

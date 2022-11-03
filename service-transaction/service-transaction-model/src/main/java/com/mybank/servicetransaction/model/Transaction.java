@@ -23,8 +23,8 @@ public class Transaction {
   private String note;
   private TransactionStatus status;
   private String statusDetail;
-  private DestinationDetail source;
-  private DestinationDetail destination;
+  private AccountDetail source;
+  private AccountDetail destination;
   private long timestamp;
 
   @Data
@@ -32,7 +32,7 @@ public class Transaction {
   @NoArgsConstructor
   @AllArgsConstructor
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  public static class DestinationDetail {
+  public static class AccountDetail {
     private String accountHolderName;
     private String accountNumber;
     private String accountProvider;

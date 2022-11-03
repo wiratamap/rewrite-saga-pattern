@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @ConfigurationProperties("event.topic")
 public class EventProperties {
   private OutboundEvent outbound;
+  private List<String> deadLetters;
 
   @Data
   @NoArgsConstructor
