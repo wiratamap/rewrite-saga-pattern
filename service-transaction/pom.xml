@@ -26,7 +26,7 @@
 	</parent>
 	<groupId>com.mybank</groupId>
 	<artifactId>service-transaction</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>service-transaction</name>
 	<description>Service Transaction</description>
 	<properties>
