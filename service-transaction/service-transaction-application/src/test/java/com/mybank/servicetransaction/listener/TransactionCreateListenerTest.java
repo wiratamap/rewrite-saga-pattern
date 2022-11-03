@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import co.elastic.clients.elasticsearch._types.Conflicts;
+import com.mybank.servicetransaction.repository.IndexNameConstant;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ class TransactionCreateListenerTest {
   @AfterEach
   public void tearDown() throws IOException {
     elasticsearchClient.deleteByQuery(query -> query
-      .index("transactions")
+      .index(IndexNameConstant.TRANSACTIONS)
       .query(criteriaQuery -> criteriaQuery
         .matchAll(value -> value
           .queryName("")))
@@ -74,7 +75,7 @@ class TransactionCreateListenerTest {
       .timestamp(System.currentTimeMillis())
       .build();
     elasticsearchClient.index(index -> index
-      .index("transactions")
+      .index(IndexNameConstant.TRANSACTIONS)
       .id(pendingTransaction.getTransactionId().toString())
       .document(pendingTransaction));
     pendingTransaction.getSource().setAccountHolderName("John Doe");
@@ -92,7 +93,7 @@ class TransactionCreateListenerTest {
       .atMost(Duration.ofSeconds(2))
       .untilAsserted(() -> {
         Transaction updatedTransaction = Optional.ofNullable(elasticsearchClient.get(getAction -> getAction
-              .index("transactions")
+              .index(IndexNameConstant.TRANSACTIONS)
               .id(pendingTransaction.getTransactionId().toString()),
             Transaction.class))
           .map(GetResponse::source)
@@ -125,7 +126,7 @@ class TransactionCreateListenerTest {
       .timestamp(System.currentTimeMillis())
       .build();
     elasticsearchClient.index(index -> index
-      .index("transactions")
+      .index(IndexNameConstant.TRANSACTIONS)
       .id(pendingTransaction.getTransactionId().toString())
       .document(pendingTransaction));
     pendingTransaction.getSource().setAccountHolderName("John Doe");
@@ -144,7 +145,7 @@ class TransactionCreateListenerTest {
       .atMost(Duration.ofSeconds(2))
       .untilAsserted(() -> {
         Transaction updatedTransaction = Optional.ofNullable(elasticsearchClient.get(getAction -> getAction
-              .index("transactions")
+              .index(IndexNameConstant.TRANSACTIONS)
               .id(pendingTransaction.getTransactionId().toString()),
             Transaction.class))
           .map(GetResponse::source)

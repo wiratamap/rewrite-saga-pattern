@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.mybank.servicetransaction.repository.IndexNameConstant;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ class TransactionControllerTest {
   @AfterEach
   public void tearDown() throws IOException {
     elasticsearchClient.deleteByQuery(query -> query
-      .index("transactions")
+      .index(IndexNameConstant.TRANSACTIONS)
       .query(criteriaQuery -> criteriaQuery
         .matchAll(value -> value
           .queryName("")))
