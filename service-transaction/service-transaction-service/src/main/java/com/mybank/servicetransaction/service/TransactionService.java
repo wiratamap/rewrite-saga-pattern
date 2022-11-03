@@ -2,14 +2,13 @@ package com.mybank.servicetransaction.service;
 
 import java.util.UUID;
 
-import com.mybank.servicetransaction.helper.TransactionHelper;
 import org.springframework.stereotype.Service;
 
 import com.mybank.servicetransaction.dto.request.TransactionRequest;
 import com.mybank.servicetransaction.dto.response.TransactionResponse;
 import com.mybank.servicetransaction.enumeration.TransactionStatus;
 import com.mybank.servicetransaction.enumeration.TransactionType;
-import com.mybank.servicetransaction.eventmodel.TransactionEvent;
+import com.mybank.servicetransaction.helper.TransactionHelper;
 import com.mybank.servicetransaction.model.Transaction;
 import com.mybank.servicetransaction.outboundevent.PublisherService;
 import com.mybank.servicetransaction.properties.EventProperties;
