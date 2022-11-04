@@ -10,6 +10,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>service-account-repository</artifactId>
+  <dependencies>
+    <dependency>
+      <groupId>com.mybank</groupId>
+      <artifactId>service-account-model</artifactId>
+    </dependency>
+  </dependencies>
 
   <properties>
     <maven.compiler.source>8</maven.compiler.source>

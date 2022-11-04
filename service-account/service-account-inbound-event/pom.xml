@@ -10,6 +10,17 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>service-account-inbound-event</artifactId>
+  <dependencies>
+    <dependency>
+      <groupId>com.mybank</groupId>
+      <artifactId>service-transaction-event-model</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mybank</groupId>
+      <artifactId>service-account-service</artifactId>
+    </dependency>
+  </dependencies>
 
   <properties>
     <maven.compiler.source>8</maven.compiler.source>

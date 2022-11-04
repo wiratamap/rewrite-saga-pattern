@@ -20,25 +20,11 @@ public class Customer {
   private Gender gender;
   private String email;
   private String phoneNumber;
-  private long balance;
+  private long totalBalance;
   private boolean isPriority;
   private Set<Account> accounts;
   private PersonalInformation personalInformation;
   private long timestamp;
-
-  @Data
-  @Builder
-  @NoArgsConstructor
-  @AllArgsConstructor
-  public static class Account {
-    private String accountNumber;
-    private String cardHolderName;
-    private String cardProvider;
-    private String cardNumber;
-    private Long cardExpirationDate;
-    private Long cardCreationDate;
-    private String cvvCode;
-  }
 
   @Data
   @Builder
