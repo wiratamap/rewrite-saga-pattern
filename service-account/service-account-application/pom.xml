@@ -44,6 +44,10 @@
       <groupId>com.mybank</groupId>
       <artifactId>service-account-enumeration</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.mybank</groupId>
+      <artifactId>service-account-outbound-event</artifactId>
+    </dependency>
   </dependencies>
 
   <properties>

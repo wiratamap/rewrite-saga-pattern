@@ -53,6 +53,10 @@ public class AccountRepository {
         .id(account.getAccountNumber())
         .doc(account), Account.class))
       .mapNotNull(UpdateResponse::get)
-      .map(InlineGet::source);
+      .map(InlineGet::source)
+      .onErrorResume(throwable -> {
+        log.error("Something went wrong when update index transactions, error: ", throwable);
+        return Mono.just(Account.builder().build());
+      });
   }
 }

@@ -1,0 +1,23 @@
+{
+  "eventId": "919dae25-3f9e-4c5f-afb7-226002ea0d81",
+  "timestamp": 1667578786415,
+  "payload": {
+    "transactionId": "3d25bbe0-25d4-40c1-aab0-e46f29ae94f3",
+    "amount": 50000,
+    "currency": "IDR",
+    "note": "Lunch",
+    "status": "PENDING",
+    "source": {
+      "accountNumber": "11111",
+      "accountProvider": "MyBank",
+      "transactionType": "DEBIT"
+    },
+    "destination": {
+      "accountNumber": "22222",
+      "accountHolderName": "Bertha Doe",
+      "accountProvider": "MyBank",
+      "transactionType": "DEBIT"
+    },
+    "timestamp": 1667578786415
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "cif": "5864KF",
+  "accountNumber": "11111",
+  "cardHolderName": "John Doe",
+  "cardProvider": "VISA",
+  "cardNumber": "38129-3129310-931231-391231",
+  "cardExpirationDate": 1893430800000,
+  "cardCreationDate": 1667578752966,
+  "cvvCode": "217",
+  "balance": 500000,
+  "timestamp": 1667578786415
+}

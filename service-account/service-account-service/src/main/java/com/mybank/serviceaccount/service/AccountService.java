@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.mybank.serviceaccount.exception.AccountNotFoundException;
 import com.mybank.serviceaccount.model.Account;
+import com.mybank.serviceaccount.outboundevent.PublisherService;
 import com.mybank.serviceaccount.properties.EventProperties;
 import com.mybank.serviceaccount.repository.AccountRepository;
 import com.mybank.servicetransaction.enumeration.TransactionStatus;
 import com.mybank.servicetransaction.eventmodel.TransactionEvent;
-import com.mybank.servicetransaction.outboundevent.PublisherService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +29,10 @@ public class AccountService {
 
   private final EventProperties eventProperties;
 
+  private static final String EXCEEDING_AMOUNT_STATUS_DETAIL = "Amount exceeding source account balance";
+
   public Mono<Boolean> processTransaction(TransactionEvent transactionEvent) {
     return Mono.fromSupplier(() -> transactionEvent)
-      .filter(incomingTransaction -> "MyBank"
-        .equals(incomingTransaction.getSource().getAccountNumber()))
       .flatMap(incomingTransaction -> Mono.zip(
         accountRepository
           .findByAccountNumber(toSourceAccountNumber(incomingTransaction)),
@@ -93,7 +93,7 @@ public class AccountService {
     TransactionEvent incomingTransaction = tuple.getT3();
 
     if (incomingTransaction.getAmount() > source.getBalance()) {
-      return Mono.fromSupplier(this::toExceedingAmountStatusDetail)
+      return Mono.fromSupplier(() -> EXCEEDING_AMOUNT_STATUS_DETAIL)
         .flatMap(statusDetail -> publisherService.publish(
             toFailedTransactionEvent(incomingTransaction, source, statusDetail),
             eventProperties.getOutbound().getFailedTransaction())
@@ -105,11 +105,8 @@ public class AccountService {
     return Mono.just(tuple);
   }
 
-  private String toExceedingAmountStatusDetail() {
-    return "Amount exceeding source account balance";
-  }
-
-  private Mono<Tuple3<Account, Account, TransactionEvent>> validateExistingCustomer(Tuple3<Account, Account, TransactionEvent> tuple) {
+  private Mono<Tuple3<Account, Account, TransactionEvent>> validateExistingCustomer(
+      Tuple3<Account, Account, TransactionEvent> tuple) {
     Account source = tuple.getT1();
     Account destination = tuple.getT2();
     TransactionEvent incomingTransaction = tuple.getT3();

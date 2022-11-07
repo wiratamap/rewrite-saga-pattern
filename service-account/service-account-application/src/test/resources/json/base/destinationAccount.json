@@ -1,0 +1,12 @@
+{
+  "cif": "5814RC",
+  "accountNumber": "22222",
+  "cardHolderName": "Bertha Doe",
+  "cardProvider": "VISA",
+  "cardNumber": "00000-3129310-931231-391231",
+  "cardExpirationDate": 1893430800000,
+  "cardCreationDate": 1667578752966,
+  "cvvCode": "217",
+  "balance": 100000,
+  "timestamp": 1667578786415
+}

@@ -12,6 +12,7 @@
     <module>service-account-repository</module>
     <module>service-account-service</module>
     <module>service-account-enumeration</module>
+    <module>service-account-outbound-event</module>
   </modules>
   <parent>
 		<groupId>org.springframework.boot</groupId>
@@ -130,6 +131,11 @@
       <dependency>
         <groupId>com.mybank</groupId>
         <artifactId>service-account-enumeration</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.mybank</groupId>
+        <artifactId>service-account-outbound-event</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>
